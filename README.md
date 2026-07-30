@@ -6,7 +6,7 @@ Back-end (obrigatório)
 
 Autenticação (fluxo simples contendo):
 
-- Cadastro de usuário (nome, e-mail e senha);
+OK - Cadastro de usuário (nome, e-mail e senha);
 - Login utilizando e-mail e senha;
 - Apenas usuários autenticados podem acessar o sistema;
 - A forma de autenticação fica a seu critério.

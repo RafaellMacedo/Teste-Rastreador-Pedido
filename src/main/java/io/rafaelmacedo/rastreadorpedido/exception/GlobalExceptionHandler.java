@@ -17,13 +17,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.CONFLICT)
             .body(new ErrorResponse(
-                    ex.getMessage(),
-                    LocalDateTime.now()
+                    LocalDateTime.now(),
+                    HttpStatus.UNAUTHORIZED.value(),
+                    ex.getMessage()
             ));
     }
 
-    public record ErrorResponse(
-            String mensagem,
-            LocalDateTime data
-    ) {}
+    @ExceptionHandler(ClienteNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleClientNotFound(
+            ClienteNotFoundException ex
+    ) {
+
+        ErrorResponse error = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.UNAUTHORIZED.value(),
+            ex.getMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(error);
+    }
 }
