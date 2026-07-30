@@ -9,7 +9,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - .sqlite-data:/data
+      - ./.sqlite-data:/data
     environment:
       SPRING_DATASOURCE_URL: jdbc:sqlite:/data/app.db
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.sqlite.JDBC
