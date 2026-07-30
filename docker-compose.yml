@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    image: my-springboot-app:latest
+    container_name: db_sqlite
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - .sqlite-data:/data
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlite:/data/app.db
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.sqlite.JDBC
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
