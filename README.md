@@ -18,12 +18,13 @@ API REST desenvolvida com **Spring Boot 4**, **Spring Security**, **JWT Authenti
 
 # 📖 Sobre o projeto
 
-O objetivo deste projeto é construir uma API REST completa para gerenciamento de clientes e autenticação utilizando as principais tecnologias do ecossistema Java.
+O **Rastreador de Pedidos API** é uma API REST desenvolvida com **Spring Boot 4**, cujo objetivo é gerenciar clientes, produtos e pedidos de forma segura utilizando autenticação baseada em JWT.
 
-O projeto está sendo desenvolvido seguindo boas práticas utilizadas em aplicações corporativas, como:
+O projeto foi desenvolvido seguindo boas práticas utilizadas em aplicações corporativas, como:
 
 - Arquitetura em camadas
 - DTOs para Request e Response
+- Mapper para conversão entre entidades e DTOs
 - Tratamento global de exceções
 - Autenticação com JWT
 - Criptografia de senhas utilizando BCrypt
@@ -31,7 +32,7 @@ O projeto está sendo desenvolvido seguindo boas práticas utilizadas em aplica�
 - JPA/Hibernate
 - SQLite
 - Validação de regras de negócio
-
+- Validação de transição de status dos pedidos
 ---
 
 # 🚀 Tecnologias
@@ -58,14 +59,15 @@ src
             ├── config
             ├── controller
             ├── dto
+            │   ├── auth
             │   ├── request
             │   └── response
-            ├── entity
             ├── exception
+            ├── mapper
+            ├── model
             ├── repository
             ├── security
-            ├── service
-            └── util
+            └── service
 ```
 
 ---
@@ -104,17 +106,45 @@ As senhas são armazenadas utilizando **BCrypt**, garantindo que nunca sejam per
 ## Clientes
 
 - Cadastro de clientes
-- Busca por e-mail
-- Persistência utilizando SQLite
-- DTOs de Request e Response
+- Login utilizando e-mail e senha
+- Senhas criptografadas com BCrypt
+- Autenticação utilizando JWT
+
+---
+
+## Produtos
+
+- Cadastro de produtos
+- Listagem de produtos
+
+---
+
+## Pedidos
+
+- Criação de pedidos
+- Associação de cliente
+- Associação de endereço de entrega
+- Associação de itens do pedido
+- Listagem de pedidos
+- Busca de pedido por ID
+- Atualização de status
+- Validação das transições de status
+
+Status suportados:
+
+- RECEBIDO
+- EM_PREPARO
+- SAIU_PARA_ENTREGA
+- ENTREGUE
+- CANCELADO
 
 ---
 
 ## Segurança
 
 - Spring Security
-- Login utilizando JWT
-- PasswordEncoder (BCrypt)
+- JWT Authentication
+- BCrypt Password Encoder
 - UserDetailsService
 - JwtAuthenticationFilter
 - Rotas públicas e protegidas
@@ -123,11 +153,14 @@ As senhas são armazenadas utilizando **BCrypt**, garantindo que nunca sejam per
 
 ## Tratamento de exceções
 
-Foi implementado um tratamento global de exceções utilizando:
+Foi implementado tratamento global utilizando:
 
-- `@RestControllerAdvice`
+- @RestControllerAdvice
 - Exceções customizadas
 - Respostas padronizadas
+- Validação de DTOs
+- Tratamento para status inválidos
+- Tratamento para transições inválidas de status
 
 Exemplo:
 
@@ -143,57 +176,39 @@ Exemplo:
 
 # 📌 Endpoints
 
-## Criar cliente
+## Autenticação
 
-```
-POST /clientes
-```
-
-Body
-
-```json
-{
-    "nome":"Rafael Macedo",
-    "email":"rafael@email.com",
-    "senha":"123456"
-}
-```
-
-Resposta
-
-```json
-{
-    "id":1,
-    "nome":"Rafael Macedo",
-    "email":"rafael@email.com"
-}
-```
+| Método | Endpoint |
+|---------|----------|
+| POST | /auth/login |
 
 ---
 
-## Login
+## Clientes
 
-```
-POST /auth/login
-```
+| Método | Endpoint |
+|---------|----------|
+| POST | /clientes |
 
-Body
+---
 
-```json
-{
-    "email":"rafael@email.com",
-    "senha":"123456"
-}
-```
+## Produtos
 
-Resposta
+| Método | Endpoint |
+|---------|----------|
+| POST | /produtos |
+| GET | /produtos |
 
-```json
-{
-    "token":"eyJhbGc..."
-}
-```
+---
 
+## Pedidos
+
+| Método | Endpoint |
+|---------|----------|
+| POST | /pedidos |
+| GET | /pedidos |
+| GET | /pedidos/{id} |
+| PATCH | /pedidos/{id}/status |
 ---
 
 ## Rotas protegidas
@@ -280,25 +295,34 @@ curl --location 'http://localhost:8080/auth/login' \
 
 ---
 
+# 📋 Regras de negócio
+
+- O cliente deve existir para criar um pedido.
+- Todo pedido é criado com status **RECEBIDO**.
+- O pedido possui endereço de entrega.
+- O pedido possui um ou mais itens.
+- Apenas transições válidas de status são permitidas.
+- Após um pedido ser **ENTREGUE** ou **CANCELADO**, seu status não pode mais ser alterado.
+
+--- 
+
 # 🛣️ Roadmap
 
 - [x] Estrutura inicial do projeto
 - [x] Spring Security
 - [x] Cadastro de clientes
-- [x] DTOs
-- [x] SQLite
-- [x] PasswordEncoder
 - [x] JWT Authentication
 - [x] Login
+- [x] SQLite
+- [x] Cadastro de produtos
+- [x] Listagem de produtos
+- [x] Criação de pedidos
+- [x] Listagem de pedidos
+- [x] Busca de pedido por ID
+- [x] Atualização de status
+- [x] Validação das regras de negócio
 - [x] Exception Handler Global
-- [ ] CRUD de Pedidos
-- [ ] CRUD de Produtos
-- [ ] Refresh Token
-- [ ] Swagger/OpenAPI
-- [ ] Testes Unitários
-- [ ] Testes de Integração
-- [ ] Docker
-- [ ] CI/CD
+- [ ] Front-end React
 
 ---
 
@@ -323,27 +347,3 @@ https://www.linkedin.com/in/rafaellmacedo/
 ## 📄 Licença
 
 Este projeto foi desenvolvido para fins de estudo, prática e demonstração de conhecimentos em desenvolvimento Backend utilizando Java e Spring Boot.
-
-## O que fazer:
-
-Back-end (obrigatório)
-
-Autenticação (fluxo simples contendo):
-
-OK - Cadastro de usuário (nome, e-mail e senha);
-- Login utilizando e-mail e senha;
-- Apenas usuários autenticados podem acessar o sistema;
-- A forma de autenticação fica a seu critério.
-
-API REST em Java + Spring Boot com endpoints para:
-
-- Criar um pedido (cliente, itens, endereço de entrega);S
-- Atualizar o status do pedido, considerando os status:
-- RECEBIDO, EM_PREPARO, SAIU_PARA_ENTREGA, ENTREGUE e CANCELADO;
-- Listar todos os pedidos e buscar um pedido por ID.
-
-Persistência em SQLite ou similar.
-
-Front-end (obrigatório)
-
-- Aplicação em React que lista os pedidos com seus status atuais e permite criar um novo pedido.
