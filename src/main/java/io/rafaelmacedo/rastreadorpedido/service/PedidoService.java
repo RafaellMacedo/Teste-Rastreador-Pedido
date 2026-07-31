@@ -1,5 +1,6 @@
 package io.rafaelmacedo.rastreadorpedido.service;
 
+import io.rafaelmacedo.rastreadorpedido.dto.request.AtualizarStatusRequestDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.request.PedidoRequestDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.response.PedidoResponseDTO;
 import io.rafaelmacedo.rastreadorpedido.exception.ClienteNotFoundException;
@@ -35,9 +36,25 @@ public class PedidoService {
     }
 
     public PedidoResponseDTO buscarPorId(Long pedidoId) {
-        Pedido pedido = pedidoRepository.findById(pedidoId)
+        Pedido pedido = findPedidoByIdOrFail(pedidoId);
+        return pedidoMapper.toResponse(pedido);
+    }
+
+    public PedidoResponseDTO atualizarStatus(Long pedidoId,
+                                             AtualizarStatusRequestDTO dto) {
+        Pedido pedido = findPedidoByIdOrFail(pedidoId);
+
+        pedido.getStatus().validarTransicao(dto.status());
+
+        pedido.setStatus(dto.status());
+        Pedido pedidoAtualizado = pedidoRepository.save(pedido);
+
+        return pedidoMapper.toResponse(pedidoAtualizado);
+    }
+
+    private Pedido findPedidoByIdOrFail(Long pedidoId) {
+        return pedidoRepository.findById(pedidoId)
                 .orElseThrow(() ->
                         new PedidoNotFoundException("Pedido não encontrado"));
-        return pedidoMapper.toResponse(pedido);
     }
 }
