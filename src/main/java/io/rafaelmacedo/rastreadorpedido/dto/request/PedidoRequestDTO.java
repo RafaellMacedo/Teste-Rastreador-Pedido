@@ -4,7 +4,7 @@ import java.util.List;
 
 public record PedidoRequestDTO(
     Long clienteId,
-    EnderecoEntregaRequestDTO endereco,
+    EnderecoEntregaRequestDTO enderecoEntrega,
     List<ItemPedidoRequestDTO> itens
 ) {
 }
