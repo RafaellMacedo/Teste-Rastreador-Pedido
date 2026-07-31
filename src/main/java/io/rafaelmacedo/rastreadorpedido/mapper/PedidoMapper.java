@@ -8,19 +8,17 @@ import io.rafaelmacedo.rastreadorpedido.model.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class PedidoMapper {
 
     public Pedido toEntity(PedidoRequestDTO dto, Cliente cliente) {
-
         Pedido pedido = new Pedido();
-
         pedido.setCliente(cliente);
         pedido.setStatus(PedidoStatus.RECEBIDO);
         pedido.setDataCriacao(LocalDateTime.now());
-
-        pedido.setEnderecoEntrega(toEndereco(dto.endereco()));
+        pedido.setEnderecoEntrega(toEndereco(dto.enderecoEntrega()));
 
         dto.itens()
             .stream()
@@ -31,7 +29,6 @@ public class PedidoMapper {
     }
 
     public PedidoResponseDTO toResponse(Pedido pedido) {
-
         return PedidoResponseDTO.builder()
                 .id(pedido.getId())
                 .clienteId(pedido.getCliente().getId())
@@ -40,10 +37,14 @@ public class PedidoMapper {
                 .build();
     }
 
+    public List<PedidoResponseDTO> toResponseList(List<Pedido> pedidos) {
+        return pedidos.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     private EnderecoEntrega toEndereco(EnderecoEntregaRequestDTO dto) {
-
         EnderecoEntrega endereco = new EnderecoEntrega();
-
         endereco.setLogradouro(dto.logradouro());
         endereco.setNumero(dto.numero());
         endereco.setComplemento(dto.complemento());
@@ -51,17 +52,13 @@ public class PedidoMapper {
         endereco.setCidade(dto.cidade());
         endereco.setEstado(dto.estado());
         endereco.setCep(dto.cep());
-
         return endereco;
     }
 
     private ItemPedido toItem(ItemPedidoRequestDTO dto) {
-
         ItemPedido item = new ItemPedido();
-
         item.setProdutoId(dto.produtoId());
         item.setQuantidade(dto.quantidade());
-
         return item;
     }
 
