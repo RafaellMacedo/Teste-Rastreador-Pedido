@@ -16,9 +16,13 @@ API REST desenvolvida com **Spring Boot 4**, **Spring Security**, **JWT Authenti
 
 ---
 
-# 📖 Sobre o projeto
+## 📄 Sobre este projeto
 
-O **Rastreador de Pedidos API** é uma API REST desenvolvida com **Spring Boot 4**, cujo objetivo é gerenciar clientes, produtos e pedidos de forma segura utilizando autenticação baseada em JWT.
+Este projeto foi desenvolvido como parte de um desafio técnico para um processo seletivo de Desenvolvedor Java.
+
+O objetivo foi implementar uma API REST completa para gerenciamento de clientes, produtos e pedidos, utilizando Java e Spring Boot, aplicando conceitos de autenticação com JWT, arquitetura em camadas, tratamento de exceções, persistência com JPA/Hibernate e boas práticas de desenvolvimento.
+
+Após a conclusão do desafio, o projeto continuou evoluindo e passou a fazer parte do meu portfólio pessoal, servindo como demonstração prática dos meus conhecimentos em desenvolvimento Backend.
 
 O projeto foi desenvolvido seguindo boas práticas utilizadas em aplicações corporativas, como:
 
@@ -346,4 +350,6 @@ https://www.linkedin.com/in/rafaellmacedo/
 
 ## 📄 Licença
 
-Este projeto foi desenvolvido para fins de estudo, prática e demonstração de conhecimentos em desenvolvimento Backend utilizando Java e Spring Boot.
+Este projeto foi desenvolvido como parte de um desafio técnico para um processo seletivo, com o objetivo de demonstrar conhecimentos em desenvolvimento Backend utilizando Java, Spring Boot, Spring Security, JWT e boas práticas de arquitetura de software.
+
+O código permanece disponível para fins de estudo, aprendizado e demonstração de portfólio.
