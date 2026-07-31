@@ -22,6 +22,7 @@ public class SecurityConfig {
             JwtAuthenticationFilter jwtFilter
     ) throws Exception {
         return http
+                .cors(cors -> {})
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/clientes","/auth/login", "/produtos")

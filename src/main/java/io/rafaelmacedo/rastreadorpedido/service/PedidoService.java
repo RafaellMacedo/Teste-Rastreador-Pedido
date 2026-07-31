@@ -22,8 +22,8 @@ public class PedidoService {
     private final ClienteRepository clienteRepository;
     private final PedidoMapper pedidoMapper;
 
-    public PedidoResponseDTO criar(PedidoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(dto.clienteId())
+    public PedidoResponseDTO criar(PedidoRequestDTO dto, String email) {
+        Cliente cliente = clienteRepository.findByEmail(email)
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
 
         Pedido pedido = pedidoMapper.toEntity(dto, cliente);
