@@ -1,4 +1,8 @@
 package io.rafaelmacedo.rastreadorpedido.dto.request;
 
-public record AtualizarStatusRequestDTO() {
+import io.rafaelmacedo.rastreadorpedido.model.PedidoStatus;
+
+public record AtualizarStatusRequestDTO(
+        PedidoStatus status
+) {
 }

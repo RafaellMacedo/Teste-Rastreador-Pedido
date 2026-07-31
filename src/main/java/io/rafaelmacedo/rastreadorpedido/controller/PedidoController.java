@@ -1,5 +1,6 @@
 package io.rafaelmacedo.rastreadorpedido.controller;
 
+import io.rafaelmacedo.rastreadorpedido.dto.request.AtualizarStatusRequestDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.request.PedidoRequestDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.response.PedidoResponseDTO;
 import io.rafaelmacedo.rastreadorpedido.service.PedidoService;
@@ -30,5 +31,12 @@ public class PedidoController {
     @GetMapping("/{id}")
     public PedidoResponseDTO buscarPorId(@PathVariable Long id) {
         return service.buscarPorId(id);
+    }
+
+    @PatchMapping("/{id}/status")
+    public PedidoResponseDTO atualizarStatus(
+            @PathVariable Long id,
+            @RequestBody AtualizarStatusRequestDTO dto) {
+        return service.atualizarStatus(id, dto);
     }
 }
