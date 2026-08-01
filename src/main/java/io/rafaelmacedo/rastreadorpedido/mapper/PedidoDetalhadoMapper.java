@@ -6,12 +6,20 @@ import io.rafaelmacedo.rastreadorpedido.dto.response.PedidoDetalhadoResponseDTO;
 import io.rafaelmacedo.rastreadorpedido.model.EnderecoEntrega;
 import io.rafaelmacedo.rastreadorpedido.model.ItemPedido;
 import io.rafaelmacedo.rastreadorpedido.model.Pedido;
+import io.rafaelmacedo.rastreadorpedido.model.Produto;
+import io.rafaelmacedo.rastreadorpedido.repository.ProdutoRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class PedidoDetalhadoMapper {
+
+    private final ProdutoRepository produtoRepository;
+
+    public PedidoDetalhadoMapper(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
+    }
 
     public PedidoDetalhadoResponseDTO toDetalhadoResponse(Pedido pedido) {
         return new PedidoDetalhadoResponseDTO(
@@ -43,8 +51,13 @@ public class PedidoDetalhadoMapper {
     }
 
     private ItemPedidoResponse toItemResponse(ItemPedido item) {
+        Produto produto = produtoRepository
+                .findById(item.getProdutoId())
+                .orElse(null);
+
         return new ItemPedidoResponse(
                 item.getProdutoId(),
+                produto != null ? produto.getNome() : "Produto não encontrado",
                 item.getQuantidade(),
                 item.getUnitario()
         );
