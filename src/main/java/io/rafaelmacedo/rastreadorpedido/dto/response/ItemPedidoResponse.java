@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public record ItemPedidoResponse(
         Long produtoId,
+        String nome,
         Integer quantidade,
         BigDecimal valor
 ) {

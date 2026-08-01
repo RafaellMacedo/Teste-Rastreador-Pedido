@@ -45,6 +45,9 @@ public class PedidoService {
 
     public PedidoDetalhadoResponseDTO buscarPorId(Long pedidoId) {
         Pedido pedido = findPedidoByIdOrFail(pedidoId);
+
+
+
         return pedidoDetalhadoMapper.toDetalhadoResponse(pedido);
     }
 
