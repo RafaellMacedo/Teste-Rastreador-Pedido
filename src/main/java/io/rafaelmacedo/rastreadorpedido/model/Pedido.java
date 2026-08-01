@@ -3,6 +3,7 @@ package io.rafaelmacedo.rastreadorpedido.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,9 @@ public class Pedido {
     private PedidoStatus status;
 
     private LocalDateTime dataCriacao;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal total;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_entrega_id")
