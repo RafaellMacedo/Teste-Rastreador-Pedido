@@ -53,6 +53,40 @@ O projeto foi desenvolvido seguindo boas práticas utilizadas em aplicações co
 
 ---
 
+# 🔗 Projetos Relacionados
+
+Este projeto faz parte de uma aplicação completa desenvolvida por mim, composta por um frontend em React e uma API REST em Spring Boot. Ambos foram criados inicialmente para atender a um teste técnico de um processo seletivo e, atualmente, são mantidos como parte do meu portfólio para demonstrar conhecimentos em arquitetura de software, desenvolvimento full stack e integração entre aplicações.
+
+| Projeto                                 | Descrição                                                                                                                                                                            |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [**Frontend - Rastreador de Pedidos**](https://github.com/RafaellMacedo/rastreador-pedido-frontend)    | Interface web desenvolvida com React, TypeScript, Material UI e React Router, responsável pela autenticação dos usuários e gerenciamento dos pedidos através do consumo da API REST. |
+| [**Backend - Rastreador de Pedidos API**](https://github.com/RafaellMacedo/Teste-Rastreador-Pedido/) | API REST desenvolvida com Spring Boot, Spring Security, JWT Authentication, JPA/Hibernate e SQLite, responsável pelas regras de negócio, autenticação e persistência dos dados.      |
+
+### Arquitetura da Solução
+
+```text
+┌─────────────────────────────┐
+│     Frontend (React)        │
+│ React + TypeScript + MUI    │
+└──────────────┬──────────────┘
+               │ HTTP / JSON
+               ▼
+┌─────────────────────────────┐
+│   Backend (Spring Boot)     │
+│ REST API + JWT + JPA         │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│         SQLite              │
+└─────────────────────────────┘
+```
+
+Os dois projetos podem ser utilizados de forma independente para estudo ou em conjunto para demonstrar uma aplicação Full Stack completa, incluindo autenticação, consumo de APIs REST, gerenciamento de estado, navegação protegida e persistência de dados.
+
+---
+
+
 # 📂 Estrutura do projeto
 
 ```
