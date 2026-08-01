@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "itens_pedido")
 @Getter
@@ -21,6 +23,9 @@ public class ItemPedido {
 
     @Column(nullable = false)
     private Integer quantidade;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal unitario;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id", nullable = false)

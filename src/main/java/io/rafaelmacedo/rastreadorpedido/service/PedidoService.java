@@ -2,16 +2,21 @@ package io.rafaelmacedo.rastreadorpedido.service;
 
 import io.rafaelmacedo.rastreadorpedido.dto.request.AtualizarStatusRequestDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.request.PedidoRequestDTO;
+import io.rafaelmacedo.rastreadorpedido.dto.response.PedidoDetalhadoResponseDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.response.PedidoResponseDTO;
 import io.rafaelmacedo.rastreadorpedido.exception.ClienteNotFoundException;
 import io.rafaelmacedo.rastreadorpedido.exception.PedidoNotFoundException;
+import io.rafaelmacedo.rastreadorpedido.exception.ProdutoNotFoundException;
+import io.rafaelmacedo.rastreadorpedido.mapper.PedidoDetalhadoMapper;
 import io.rafaelmacedo.rastreadorpedido.mapper.PedidoMapper;
 import io.rafaelmacedo.rastreadorpedido.model.*;
 import io.rafaelmacedo.rastreadorpedido.repository.ClienteRepository;
 import io.rafaelmacedo.rastreadorpedido.repository.PedidoRepository;
+import io.rafaelmacedo.rastreadorpedido.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -20,13 +25,16 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final ClienteRepository clienteRepository;
+    private final ProdutoRepository produtoRepository;
     private final PedidoMapper pedidoMapper;
+    private final PedidoDetalhadoMapper pedidoDetalhadoMapper;
 
     public PedidoResponseDTO criar(PedidoRequestDTO dto, String email) {
         Cliente cliente = clienteRepository.findByEmail(email)
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
 
         Pedido pedido = pedidoMapper.toEntity(dto, cliente);
+        pedido.setTotal(calcularTotal(pedido));
         Pedido pedidoNovo = pedidoRepository.save(pedido);
         return pedidoMapper.toResponse(pedidoNovo);
     }
@@ -35,9 +43,9 @@ public class PedidoService {
         return pedidoMapper.toResponseList(pedidoRepository.findAll());
     }
 
-    public PedidoResponseDTO buscarPorId(Long pedidoId) {
+    public PedidoDetalhadoResponseDTO buscarPorId(Long pedidoId) {
         Pedido pedido = findPedidoByIdOrFail(pedidoId);
-        return pedidoMapper.toResponse(pedido);
+        return pedidoDetalhadoMapper.toDetalhadoResponse(pedido);
     }
 
     public PedidoResponseDTO atualizarStatus(Long pedidoId,
@@ -56,5 +64,25 @@ public class PedidoService {
         return pedidoRepository.findById(pedidoId)
                 .orElseThrow(() ->
                         new PedidoNotFoundException("Pedido não encontrado"));
+    }
+
+    private BigDecimal calcularTotal(Pedido pedido) {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (ItemPedido item : pedido.getItens()) {
+
+            Produto produto = produtoRepository.findById(item.getProdutoId())
+                    .orElseThrow(() ->
+                            new ProdutoNotFoundException(item.getProdutoId().toString()));
+
+            item.setUnitario(produto.getPreco());
+
+            BigDecimal subtotal = produto.getPreco()
+                    .multiply(BigDecimal.valueOf(item.getQuantidade()));
+
+            total = total.add(subtotal);
+        }
+
+        return total;
     }
 }

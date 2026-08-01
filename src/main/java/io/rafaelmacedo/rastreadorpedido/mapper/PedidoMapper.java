@@ -4,9 +4,12 @@ import io.rafaelmacedo.rastreadorpedido.dto.request.EnderecoEntregaRequestDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.request.ItemPedidoRequestDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.request.PedidoRequestDTO;
 import io.rafaelmacedo.rastreadorpedido.dto.response.PedidoResponseDTO;
+import io.rafaelmacedo.rastreadorpedido.dto.response.ProdutoResponseDTO;
 import io.rafaelmacedo.rastreadorpedido.model.*;
+import io.rafaelmacedo.rastreadorpedido.repository.ProdutoRepository;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
